@@ -818,6 +818,12 @@
       "languageVersion": "2.12"
     },
     {
+      "name": "gif",
+      "rootUri": "file:///C:/Users/AWAIS/AppData/Local/Pub/Cache/hosted/pub.dev/gif-2.2.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "giphy_get",
       "rootUri": "file:///C:/Users/AWAIS/AppData/Local/Pub/Cache/hosted/pub.dev/giphy_get-3.4.2",
       "packageUri": "lib/",
@@ -1814,7 +1820,7 @@
       "languageVersion": "3.0"
     }
   ],
-  "generated": "2023-09-14T23:45:02.564154Z",
+  "generated": "2023-09-15T18:22:26.973928Z",
   "generator": "pub",
   "generatorVersion": "3.1.0"
 }

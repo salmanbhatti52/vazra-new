@@ -5,6 +5,7 @@ import 'dart:convert';
 
 import 'dart:io';
 import 'package:fiberchat/Screens/homepage/Setupdata.dart';
+import 'package:gif/gif.dart';
 import 'package:fiberchat/Services/Providers/SmartContactProviderWithLocalStoreData.dart';
 import 'package:fiberchat/Services/localization/language.dart';
 import 'package:fiberchat/Utils/color_detector.dart';
@@ -123,7 +124,7 @@ class ChatScreen extends StatefulWidget {
   State createState() => new _ChatScreenState();
 }
 
-class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
+class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver, TickerProviderStateMixin  {
   GlobalKey<ScaffoldState> _scaffold = new GlobalKey<ScaffoldState>();
   bool isDeleteChatManually = false;
   bool isReplyKeyboard = false;
@@ -192,6 +193,34 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
   int _numInterstitialLoadAttempts = 0;
   RewardedAd? _rewardedAd;
   int _numRewardedLoadAttempts = 0;
+
+  List linksGifs = [
+    'https://eigix.net/vazra-gif/Duck_Sticker_Z01.gif',
+    'https://eigix.net/vazra-gif/Duck_Sticker_Z02.gif',
+    'https://eigix.net/vazra-gif/Duck_Sticker_Z03.gif',
+    'https://eigix.net/vazra-gif/Duck_Sticker_Z04.gif',
+    'https://eigix.net/vazra-gif/Duck_Sticker_Z05.gif',
+    'https://eigix.net/vazra-gif/Duck_Sticker_Z06.gif',
+    'https://eigix.net/vazra-gif/Hamster_Sticker_Z01.gif',
+    'https://eigix.net/vazra-gif/Hamster_Sticker_Z02.gif',
+    'https://eigix.net/vazra-gif/Hamster_Sticker_Z03.gif',
+    'https://eigix.net/vazra-gif/Hamster_Sticker_Z04.gif',
+    'https://eigix.net/vazra-gif/Hamster_Sticker_Z05.gif',
+    'https://eigix.net/vazra-gif/Hamster_Sticker_Z06.gif',
+    'https://eigix.net/vazra-gif/Otter_Sticker_Z01.gif',
+    'https://eigix.net/vazra-gif/Otter_Sticker_Z02.gif',
+    'https://eigix.net/vazra-gif/Otter_Sticker_Z03.gif',
+    'https://eigix.net/vazra-gif/Otter_Sticker_Z04.gif',
+    'https://eigix.net/vazra-gif/Otter_Sticker_Z05.gif',
+    '77https://eigix.net/vazra-gif/Otter_Sticker_Z06.gif',
+  ];
+
+  GifController? gifController;
+
+  gifInit() {
+    gifController = GifController(vsync: this);
+  }
+
   @override
   void initState() {
     super.initState();
@@ -4433,34 +4462,77 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver {
                                                                 'mediamssgnotallowed'));
                                                       }
                                                     : () async {
-                                                        GiphyGif? gif =
-                                                            await GiphyGet
-                                                                .getGif(
-                                                          tabColor:
-                                                              fiberchatPRIMARYcolor,
+                                              showModalBottomSheet(
+                                                  context: context,
+                                                  builder: (context) {
+                                                    return Container(
 
-                                                          context: context,
-                                                          apiKey:
-                                                              GiphyAPIKey, //YOUR API KEY HERE
-                                                          lang: GiphyLanguage
-                                                              .english,
-                                                        );
-                                                        if (gif != null &&
-                                                            mounted) {
-                                                          onSendMessage(
-                                                              context,
-                                                              gif
-                                                                  .images!
-                                                                  .original!
-                                                                  .url,
-                                                              MessageType.image,
-                                                              DateTime.now()
-                                                                  .millisecondsSinceEpoch);
-                                                          hidekeyboard(context);
-                                                          setStateIfMounted(
-                                                              () {});
-                                                        }
-                                                      }),
+                                                        child: GridView
+                                                            .builder(
+                                                          itemCount:
+                                                          linksGifs
+                                                              .length,
+                                                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                                                              crossAxisCount:
+                                                              2,
+                                                              crossAxisSpacing:
+                                                              10.0,
+                                                              mainAxisSpacing:
+                                                              10.0),
+                                                          itemBuilder:
+                                                              (BuildContext
+                                                          context,
+                                                              int index) {
+                                                            return GestureDetector(
+                                                              child: Container(
+                                                                padding: EdgeInsets.symmetric(
+                                                                  horizontal:20,vertical:20,
+                                                                ),
+
+
+                                                                child:Gif(
+                                                                  height: 5,width: 5,
+
+                                                                  fit: BoxFit.scaleDown,
+                                                                  image: NetworkImage(
+                                                                    '${linksGifs[index]}',),
+                                                                  controller:
+                                                                  gifController, // if duration and fps is null, original gif fps will be used.
+                                                                  //fps: 30,
+                                                                  //duration: const Duration(seconds: 3),
+                                                                  autostart:
+                                                                  Autostart
+                                                                      .no,
+                                                                  // placeholder: (context) => const Text('Loading...'),
+                                                                  onFetchCompleted:
+                                                                      () {
+                                                                    gifController
+                                                                        ?.reset();
+                                                                    gifController
+                                                                        ?.forward();
+                                                                  },
+                                                                ),),
+                                                              onTap: () {
+                                                                if (gifController !=
+                                                                    null &&
+                                                                    mounted) {
+                                                                  onSendMessage(
+                                                                      context,
+                                                                      linksGifs[index]!,
+                                                                      MessageType.image,
+                                                                      DateTime.now().millisecondsSinceEpoch);
+                                                                  hidekeyboard(
+                                                                      context);
+                                                                  setStateIfMounted(
+                                                                          () {});
+                                                                  Navigator.of(context).pop();
+                                                                }
+                                                              },
+                                                            );
+                                                          },
+                                                        ));
+                                                  });
+                                            }),
                                       ),
                               ],
                             ))
