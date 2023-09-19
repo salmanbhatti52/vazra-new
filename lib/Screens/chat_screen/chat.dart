@@ -258,6 +258,7 @@ class _ChatScreenState extends State<ChatScreen> with WidgetsBindingObserver, Ti
         }
       });
     });
+    print("hiiii");
     setStatusBarColor(widget.prefs);
   }
 
